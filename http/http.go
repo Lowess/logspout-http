@@ -235,15 +235,21 @@ func (a *HTTPAdapter) flushHttp(reason string) {
 	messages := make([]string, 0, len(buffer))
 	for i := range buffer {
 		m := buffer[i]
-		httpMessage := HTTPMessage{
+		// httpMessage := HTTPMessage{
+		// 	Message:  m.Data,
+		// 	Time:     m.Time.Format(time.RFC3339),
+		// 	Source:   m.Source,
+		// 	Name:     m.Container.Name,
+		// 	ID:       m.Container.ID,
+		// 	Image:    m.Container.Config.Image,
+		// 	Hostname: m.Container.Config.Hostname,
+		// }
+		httpMessage := HTTPLightMessage{
 			Message:  m.Data,
 			Time:     m.Time.Format(time.RFC3339),
-			Source:   m.Source,
-			Name:     m.Container.Name,
-			ID:       m.Container.ID,
-			Image:    m.Container.Config.Image,
-			Hostname: m.Container.Config.Hostname,
+			Image:    m.Container.Config.Image.Split('/').Last(),
 		}
+
 		message, err := json.Marshal(httpMessage)
 		if err != nil {
 			debug("flushHttp - Error encoding JSON: ", err)
@@ -335,4 +341,11 @@ type HTTPMessage struct {
 	ID       string `json:"docker_id"`
 	Image    string `json:"docker_image"`
 	Hostname string `json:"docker_hostname"`
+}
+
+// HTTPLightMessage is a lighter JSON representation of the log message.
+type HTTPLightMessage struct {
+	Message  string `json:"message"`
+	Time     string `json:"time"`
+	Image    string `json:"docker_image"`
 }
