@@ -244,7 +244,7 @@ func (a *HTTPAdapter) flushHttp(reason string) {
 		// 	Image:    m.Container.Config.Image,
 		// 	Hostname: m.Container.Config.Hostname,
 		// }
-		dockerImageSplit := strings.Split(m.Container.Config.Image, '/')
+		dockerImageSplit := strings.Split(m.Container.Config.Image, "/")
 
 		httpMessage := HTTPLightMessage{
 			Message:  m.Data,
