@@ -244,10 +244,12 @@ func (a *HTTPAdapter) flushHttp(reason string) {
 		// 	Image:    m.Container.Config.Image,
 		// 	Hostname: m.Container.Config.Hostname,
 		// }
+		dockerImageSplit := strings.Split(m.Container.Config.Image, '/')
+
 		httpMessage := HTTPLightMessage{
 			Message:  m.Data,
 			Time:     m.Time.Format(time.RFC3339),
-			Image:    strings.Split(m.Container.Config.Image, '/').Last(),
+			Image:    dockerImageSplit[len(dockerImageSplit) - 1],
 		}
 
 		message, err := json.Marshal(httpMessage)
