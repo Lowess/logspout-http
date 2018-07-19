@@ -247,7 +247,7 @@ func (a *HTTPAdapter) flushHttp(reason string) {
 		httpMessage := HTTPLightMessage{
 			Message:  m.Data,
 			Time:     m.Time.Format(time.RFC3339),
-			Image:    m.Container.Config.Image.Split('/').Last(),
+			Image:    strings.Split(m.Container.Config.Image, '/').Last(),
 		}
 
 		message, err := json.Marshal(httpMessage)
